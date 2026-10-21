@@ -29,7 +29,6 @@ while(cont2 != 5){
     clave = "";
 }
 
-console.log(Mapa);
 
 for(const[clave, valor] of Mapa){
     media +=valor;

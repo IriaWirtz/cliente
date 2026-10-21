@@ -13,14 +13,15 @@ while(registros != 3){
     var user = sep[0];
     var con = sep[1];
 
-    if(sep.length != 2 || Number.isInteger(user) || Number.isInteger(con) || con =="" || user==""){
+    if(sep.length != 2 || con =="" || user==""){
         console.log("Entrada inválida");
     }
 
 
-   else {Mapa.set(user,con)
+   else {Mapa.set(user,con);
+    MapaBloq.set(user, 0);
     registros++;
-   };
+   }
     
   
 }
@@ -34,39 +35,52 @@ var sepcomp = comprobar.split(" ");
 var compUser = sepcomp[0];
 var compCon = sepcomp[1];
 
-if(sep.length != 2 || Number.isInteger(user) || Number.isInteger(con) || con =="" || user==""){
+if(sepcomp.length != 2 || compUser =="" || compCon==""){
     console.log("Entrada inválida");
     }
-   
-else if(Mapa.has(compUser) && Mapa.get(compUser)==compCon && MapaBloq.get(compUser) != "Bloqueada"){
-    console.log("Usuario logeado");
-    break;
-}
+
 else if(!Mapa.has(compUser)){
     console.log("Usuario o contraseña incorrecta");
 
-}
-else if(Mapa.has(compUser) && !MapaBloq.has(compUser)) {
-    console.log("Usuario o contraseña incorrecta")
-    MapaBloq.set(compUser, 1);
-    intentos++;
-}
-else if(MapaBloq.has(compUser) && MapaBloq.get(compUser) !=3){ MapaBloq.set(compUser, MapaBloq.get(compUser)+1);
-    intentos++;}
-
-else if(MapaBloq.get(compUser) != "Bloqueada") {
-    console.log("Cuenta bloqueada");
-    MapaBloq.set(compUser, "Bloqueada");
-    bloqs++;
 }    
-
-    
-
-
-
-
-    
+else if(MapaBloq.get(compUser) == "Bloqueada")  {
+    console.log("Cuenta bloqueada");
+}  
+   
+else if(Mapa.get(compUser)==compCon){
+    console.log("Usuario logeado");
+    break;
 }
+
+else {
+        intentos = MapaBloq.get(compUser);
+        intentos++;
+
+        if (intentos == 3) {
+            MapaBloq.set(compUser, "Bloqueada");
+            bloqs++;
+
+            console.log("Cuenta bloqueada");
+
+        }
+        else {
+            MapaBloq.set(compUser, intentos);
+            console.log("Usuario o contraseña incorrecta");
+        }
+    }
+}
+
+if(bloqs == Mapa.size){
+    console.log("Todos los usuarios están bloqueados");
+}
+
+    
+
+
+
+
+    
+
 
    
 
