@@ -1,3 +1,5 @@
+
+
 function crearEjercicio(nombre, duracion, intensidad ){
     if(Number.isInteger(nombre) || !(duracion  <= 0 || duracion >= 0 ) || !(intensidad <= 10 && intensidad >= 0) ){
    return null;
@@ -85,6 +87,20 @@ function ordenarEjercicios(plan, criterio){
     
 
 }
+
+module.exports={
+    crearEjercicio, 
+    crearPlan,
+    agregarEjercicio,
+    eliminarEjercicio,
+    listarEjercicios,
+    filtrarEjercicios,
+    calcularDuracionTotal,
+    actualizarEjercicio,
+    buscarEjercicioRecursivo,
+    multiplicarDuracionesEjercicios,
+    ordenarEjercicios
+};
 
 
 
