@@ -54,39 +54,43 @@ function filtrarEjercicios(plan, intensidad){
     return copia;
 }
 
-function calcularDuracionTotal(plan){
-    var suma = 0;
-    for (let i = 0; i < plan.ejers.length; i++) {
-       suma+=plan.ejers[i].duracion;
-        
-    }
-    return suma;
-}
 
 function actualizarEjercicio(plan, nombreEjercicio, dur, int = plan.ejers.intensidad){
-    const copia = {...plan, ejers: plan.ejers.map((ej)=> ej.nombre == nombreEjercicio ? {...ej, duracion:dur, intensidad:int}:ej),};
+    const copia = {...plan, ejers: plan.ejers.map((ej)=> ej.nombre == nombreEjercicio ? {...ej, duracion:dur, intensidad:int}:ej)};
     return copia;
 
 }
 
-function buscarEjercicioRecursivo(plan, nombreEjercicio){
+function buscarEjercicioRecursivo(plan, nombreEjercicio, pos=0){
+    if(plan.ejers[pos].nombre == nombreEjercicio){
+        return plan.ejers[pos].nombre;
+    }
+    pos++;
+
+    return buscarEjercicioRecursivo(plan, nombreEjercicio, pos);
+
 
 }
 
-function multiplicarDuracionesEjercicios(...duraciones){
 
-}
 
 function ordenarEjercicios(plan, criterio){
-    const copia = {...plan};
-
     if(criterio == "nombre"){
-        return copia.sort();
+        for (let i = 0; i < plan.length; i++) {
+            plan.ejers[i].nombre.localeCompare(plan.ejers[i+1])
+            
+        }
     }
+
+
 
     
 
 }
+
+
+
+
 
 module.exports={
     crearEjercicio, 
@@ -95,37 +99,7 @@ module.exports={
     eliminarEjercicio,
     listarEjercicios,
     filtrarEjercicios,
-    calcularDuracionTotal,
     actualizarEjercicio,
     buscarEjercicioRecursivo,
-    multiplicarDuracionesEjercicios,
     ordenarEjercicios
 };
-
-
-
-var ejer = crearEjercicio("Dominadas", 1, 1);
-var ejer2 = crearEjercicio("Sentadillas", 5, 7);
-var plan = crearPlan("Primer plan");
-
-console.log("AGREGAR EJERS A PLAN")
-
-var prueba = agregarEjercicio(plan, ejer);
-var prueba2 = agregarEjercicio(plan, ejer2);
-console.log(prueba);
-
-var eliminar = eliminarEjercicio(plan, ejer, 7);
-console.log("TRAS ELIMINAR:");
-console.log(eliminar);
-
-var listar = listarEjercicios(plan);
-var filtrar = filtrarEjercicios(plan, 5);
-console.log(filtrar);
-
-console.log("DURACION TOTAL:");
-var total = calcularDuracionTotal(plan);
-console.log(total);
-
-console.log("ACTUALIZAR EJERCICIO");
-var actualizar = actualizarEjercicio(plan, ejer2, 7 );
-console.log(actualizar);
