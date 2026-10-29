@@ -47,7 +47,7 @@ function menu() {
                         console.log(cont + "." + nombre);
                         cont++;
                     }
-                    var num = prompt("Dame el número del plan que quieras gestionar: ");
+                    var num = Number(prompt("Dame el número del plan que quieras gestionar: "));
 
                     if (num > Planes.size + 1 || num < 1) {
                         console.log("Plan no válido.");
@@ -55,8 +55,8 @@ function menu() {
                     }
 
                     else {
+                         var cont = 1;
                         for (var [nombre, plan] of Planes) {
-                            var cont = 1;
                             if (num == cont) {
                                 var elegir;
                                 do {
@@ -102,7 +102,7 @@ function menu() {
 
                                             for (var ejer of Planes.get(plan.nombre).ejers) {
                                                 if (ejer.nombre == nombreEjer) {
-                                                    var copia = eliminarEjercicio(plan, nombreEjer);
+                                                    var copia = eliminarEjercicio(Planes.get(plan.nombre), nombreEjer);
                                                     Planes.set(plan.nombre, copia);
                                                     console.log("Ejercicio eliminado.");
                                                     flag = false;
@@ -125,9 +125,41 @@ function menu() {
                                             break;
 
                                         case 4:
+                                            var intensidadMax = Number(prompt("Dame la intensidad máxima para empezar el filtrado: "));
+
+                                            var res = filtrarEjercicios(Planes.get(plan.nombre), intensidadMax);
+
+                                            if(res.length < 1){
+                                                console.log("Ningún ejercicio cumple el filtro.");
+                                            }
+                                            else console.log(filtrarEjercicios(Planes.get(plan.nombre), intensidadMax));
                                             break;
 
                                         case 5:
+                                            var flag= true;
+                                            var nombreEjer = prompt("Dame el nombre del ejercicio: ");
+
+                                            for (var ejer of Planes.get(plan.nombre).ejers) {
+                                                if (ejer.nombre == nombreEjer) {
+                                                    var nuevaDuracion = prompt("Dame la duración actualizada: ");
+                                                    var nuevaIntensidad = prompt("Dame la intensidad actualizada: ");
+
+                                                    if(nuevaDuracion < 0  || (nuevaIntensidad > 10 || nuevaIntensidad < 1)){
+                                                        console.log("Datos no válidos.");
+                                                        break;
+                                                    }
+                                                    else {var copia = actualizarEjercicio(Planes.get(plan.nombre), nombreEjer, nuevaDuracion, nuevaIntensidad);
+                                                    flag = false;
+                                                    console.log("Ejercicio actualizado.");
+                                                    break;
+                                                    }
+                                                }
+
+                                                if(flag){
+                                                    console.log("No existe ningún ejercicio con ese nombre.");
+                                                    break;
+                                                }    
+                                            }
                                             break;
                                         case 6:
                                             break;
@@ -160,7 +192,7 @@ function menu() {
 
                                 break;
                             }
-                            else cont++;
+                            cont++;
                         }
 
 

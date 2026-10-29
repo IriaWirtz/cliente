@@ -29,8 +29,8 @@ function agregarEjercicio(plan, ejercicio){
     return copia;
 }
 
-function eliminarEjercicio(plan, ejercicio){
-       const copiaEj = plan.ejers.filter((ejer) => ejer.nombre != ejercicio.nombre);
+function eliminarEjercicio(plan, nombreEjer){
+       const copiaEj = plan.ejers.filter((ejer) => ejer.nombre != nombreEjer);
        const copia = {
         nombre : plan.nombre,
         ejers: copiaEj}
@@ -46,9 +46,10 @@ function listarEjercicios(plan){
         console.log("El plan no tiene ejercicios");
     }
 
-    else for(const ej of plan.ejers){
+    else {for(const ej of plan.ejers){
         console.log(`${ej.nombre}: ${ej.duracion} minutos`);
     }
+}
 } 
 
 function filtrarEjercicios(plan, intensidad){
@@ -106,3 +107,5 @@ module.exports={
     buscarEjercicioRecursivo,
     ordenarEjercicios
 };
+
+
