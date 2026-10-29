@@ -30,7 +30,10 @@ function agregarEjercicio(plan, ejercicio){
 }
 
 function eliminarEjercicio(plan, ejercicio){
-       const copia = plan.ejers.filter((ejer) => ejer.nombre != ejercicio.nombre);
+       const copiaEj = plan.ejers.filter((ejer) => ejer.nombre != ejercicio.nombre);
+       const copia = {
+        nombre : plan.nombre,
+        ejers: copiaEj}
 
 
   
@@ -39,7 +42,7 @@ function eliminarEjercicio(plan, ejercicio){
     }
 
 function listarEjercicios(plan){
-    if(plan.ejers.length == 0){
+    if(plan.ejers.length < 1){
         console.log("El plan no tiene ejercicios");
     }
 
