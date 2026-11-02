@@ -8,7 +8,7 @@ function calcularDuracionTotal(plan){
 }
 
 function multiplicarDuracionesEjercicios(...duraciones){
-    var prod=0;
+    var prod=1;
     if(duraciones.length == 0){
         return 1;
     }
@@ -34,7 +34,13 @@ function estadisticasPlan(plan){
     duracionPromedio/=totalEjercicios;
     intensidadPromedio/=totalEjercicios;
 
-    return "duracionPromedio: " + duracionPromedio + ", intensidadPromedio: " + intensidadPromedio + ", totalEjercicios: " + totalEjercicios;
+    const res = {
+        duracionPromedio:duracionPromedio,
+        intensidadPromedio:intensidadPromedio,
+        totalEjercicios:totalEjercicios
+    }
+
+    return res;
 }
 
 module.exports={
