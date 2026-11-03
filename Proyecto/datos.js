@@ -1,7 +1,7 @@
 
 
 function crearEjercicio(nombre, duracion, intensidad) {
-    if (Number.isInteger(nombre) || !(duracion > 0) || !(intensidad <= 10 && intensidad >= 1) || nombre.trim()=="") {
+    if (Number.isInteger(nombre) || !(duracion > 0) || !(intensidad <= 10 && intensidad >= 1) || nombre.trim() == "") {
         return null;
     }
     else {
@@ -112,10 +112,38 @@ function ordenarEjercicios(plan, criterio) {
     return { ...plan, ejercicios };
 }
 
-function buscarEjerciciosPorNombre(plan, nombreParcial){
+function buscarEjerciciosPorNombre(plan, nombreParcial) {
     const busqueda = nombreParcial.toLowerCase();
     return plan.ejercicios.filter(ejercicio =>
         ejercicio.nombre.toLowerCase().includes(busqueda));
+}
+
+function combinarPlanes(plan1, plan2) {
+    const nom1 = plan1.nombre;
+    const nom2 = plan2.nombre;
+
+    const ejer1 = [...plan1.ejercicios];
+    const ejer2 = [...plan2.ejercicios];
+
+    const nuevoPlan = {
+        nombre: nom1 + " + " + nom2,
+        ejercicios: []
+    }
+
+    for (let ejer of ejer1) {
+       nuevoPlan.ejercicios = agregarEjercicio(nuevoPlan, ejer);
+    }
+
+    for (let ejer of ejer2) {
+        nuevoPlan.ejercicios = agregarEjercicio(nuevoPlan, ejer);
+    }
+
+
+
+    return nuevoPlan;
+
+
+
 }
 
 
@@ -132,7 +160,10 @@ module.exports = {
     actualizarEjercicio,
     buscarEjercicioRecursivo,
     ordenarEjercicios,
-    buscarEjerciciosPorNombre
+    buscarEjerciciosPorNombre,
+    combinarPlanes
 };
+
+
 
 

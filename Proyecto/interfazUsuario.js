@@ -10,7 +10,8 @@ const {
     actualizarEjercicio,
     buscarEjercicioRecursivo,
     ordenarEjercicios,
-    buscarEjerciciosPorNombre
+    buscarEjerciciosPorNombre,
+    combinarPlanes
 } = require('./datos.js');
 
 const {
@@ -192,11 +193,11 @@ function menu() {
 
                                         case 9:
                                             var criterio = prompt("Inserta el criterio por el que comparar: ");
-                                            if(criterio == "nombre" || criterio == "duracion" || criterio == "intensidad" ){
-                                            var copia = ordenarEjercicios(plan, criterio);
-                                            plan = ordenarEjercicios(plan, criterio);
-                                            Planes.set(plan.nombre, plan);
-                                            console.log("Ejercicios ordenados.");
+                                            if (criterio == "nombre" || criterio == "duracion" || criterio == "intensidad") {
+                                                var copia = ordenarEjercicios(plan, criterio);
+                                                plan = ordenarEjercicios(plan, criterio);
+                                                Planes.set(plan.nombre, plan);
+                                                console.log("Ejercicios ordenados.");
                                             }
                                             else console.log("Criterio no válido.");
                                             break;
@@ -204,7 +205,7 @@ function menu() {
                                         case 10:
                                             const busqueda = prompt("Inserta el texto a buscar: ");
                                             var copia = buscarEjerciciosPorNombre(plan, busqueda);
-                                            if(copia.length == 0){
+                                            if (copia.length == 0) {
                                                 console.log("No se han encontrado ejercicios.")
                                             }
                                             else copia.forEach(mostrarEjercicio);
@@ -220,7 +221,55 @@ function menu() {
                                             break;
 
                                         case 12:
-                                            break;
+                                            if (Planes.size == 0) {
+                                                console.log("No hay planes disponibles.");
+                                                break;
+                                            }
+
+                                            else {
+                                                var cont12 = 1;
+                                                var flag12 = true;
+                                                if (Planes.size > 1) {
+                                                    console.log("Planes disponibles:");
+                                                    for (var [nom, plan2] of Planes) {
+                                                        if (plan.nombre === nom) {
+                                                           
+                                                            continue;
+                                                        }
+
+                                                        else {console.log(cont12 + "." + nom);}
+                                                        cont12++;
+                                                    }
+                                                    var elegC12 = prompt("Dame el numero del plan que quieres combinar: ");
+                                                    if (elegC12 > cont12 || elegC12 < 1) {
+                                                        console.log("Plan no válido.");
+                                                        break;
+                                                    }
+                                                    var cont2 = 1;
+                                                    for (var [nomPlan, planActual] of Planes) {
+                                                         if (plan.nombre === nomPlan) {
+                                                           
+                                                            continue;
+                                                        }
+                                                        if (elegC12 == cont2) {
+                                                            const combinado= combinarPlanes(plan, planActual);
+                                                            console.log("Plan combinado creado: " + nombre + " + " + nomPlan);
+                                                            Planes.set(combinado.nombre, combinado);
+                                                            console.log(combinado);
+                                                            flag12 = false;
+                                                            break;
+
+
+                                                        }
+                                                        cont2++;
+
+                                                    }
+
+                                                   if(flag12 == true) {console.log("No hay otros planes para combinar.");}
+
+                                                    
+                                                }
+                                            }
 
                                         case 13:
                                             break;
