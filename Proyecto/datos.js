@@ -1,16 +1,16 @@
 
 
 function crearEjercicio(nombre, duracion, intensidad) {
-    if (Number.isInteger(nombre) || !(duracion <= 0 || duracion >= 0) || !(intensidad <= 10 && intensidad >= 0)) {
+    if (Number.isInteger(nombre) || !(duracion > 0) || !(intensidad <= 10 && intensidad >= 1) || nombre.trim()=="") {
         return null;
     }
     else {
-        const ejers = {
+        const ejercicios = {
             nombre: nombre,
             duracion: duracion,
             intensidad: intensidad
         }
-        return ejers;
+        return ejercicios;
     }
 
 }
@@ -18,23 +18,29 @@ function crearEjercicio(nombre, duracion, intensidad) {
 function crearPlan(nombre) {
     const plan = {
         nombre: nombre,
-        ejers: []
+        ejercicios: []
     };
 
     return plan;
 }
 
 function agregarEjercicio(plan, ejercicio) {
-    const copia = { ...plan };
-    copia.ejers.push(ejercicio);
+    const nuevoEjer = [...plan.ejercicios];
+    nuevoEjer.push(ejercicio);
+
+    const copia = {
+        nombre: plan.nombre,
+        ejercicios: nuevoEjer
+    };
+
     return copia;
 }
 
 function eliminarEjercicio(plan, nombreEjer) {
-    const copiaEj = plan.ejers.filter((ejer) => ejer.nombre != nombreEjer);
+    const copiaEj = plan.ejercicios.filter((ejer) => ejer.nombre != nombreEjer);
     const copia = {
         nombre: plan.nombre,
-        ejers: copiaEj
+        ejercicios: copiaEj
     }
 
 
@@ -44,19 +50,19 @@ function eliminarEjercicio(plan, nombreEjer) {
 }
 
 function listarEjercicios(plan) {
-    if (plan.ejers.length < 1) {
-        console.log("El plan no tiene ejercicios");
+    if (plan.ejercicios.length < 1) {
+        console.log("El plan no tiene ejercicios.");
     }
 
     else {
-        for (const ej of plan.ejers) {
+        for (const ej of plan.ejercicios) {
             console.log(`${ej.nombre}: ${ej.duracion} minutos`);
         }
     }
 }
 
 function filtrarEjercicios(plan, intensidad) {
-    const copia = plan.ejers.filter((valor) => valor.intensidad <= intensidad);
+    const copia = plan.ejercicios.filter((valor) => valor.intensidad <= intensidad);
 
     return copia;
 }
@@ -65,7 +71,7 @@ function filtrarEjercicios(plan, intensidad) {
 function actualizarEjercicio(plan, nombreEjercicio, dur, int) {
     const copia = {
         ...plan,
-        ejers: plan.ejers.map((ej) =>
+        ejercicios: plan.ejercicios.map((ej) =>
             ej.nombre === nombreEjercicio
                 ? { ...ej, duracion: dur, intensidad: int ?? ej.intensidad }
                 : ej
@@ -75,11 +81,11 @@ function actualizarEjercicio(plan, nombreEjercicio, dur, int) {
 }
 
 function buscarEjercicioRecursivo(plan, nombreEjercicio, pos = 0) {
-    if (pos >= plan.ejers.length) {
+    if (pos >= plan.ejercicios.length) {
         return null;
     }
-    if (plan.ejers[pos].nombre == nombreEjercicio) {
-        return plan.ejers[pos];
+    if (plan.ejercicios[pos].nombre == nombreEjercicio) {
+        return plan.ejercicios[pos];
     }
     pos++;
 
@@ -91,17 +97,25 @@ function buscarEjercicioRecursivo(plan, nombreEjercicio, pos = 0) {
 
 
 function ordenarEjercicios(plan, criterio) {
-    if (criterio == "nombre") {
-        for (let i = 0; i < plan.length; i++) {
-            plan.ejers[i].nombre.localeCompare(plan.ejers[i + 1])
+    const ejercicios = [...plan.ejercicios];
 
-        }
+    if (criterio === "nombre") {
+        ejercicios.sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+    } else if (criterio === "duracion") {
+        ejercicios.sort((a, b) => a.duracion - b.duracion);
+    } else if (criterio === "intensidad") {
+        ejercicios.sort((a, b) => a.intensidad - b.intensidad);
+    } else {
+        return plan;
     }
 
+    return { ...plan, ejercicios };
+}
 
-
-
-
+function buscarEjerciciosPorNombre(plan, nombreParcial){
+    const busqueda = nombreParcial.toLowerCase();
+    return plan.ejercicios.filter(ejercicio =>
+        ejercicio.nombre.toLowerCase().includes(busqueda));
 }
 
 
@@ -117,7 +131,8 @@ module.exports = {
     filtrarEjercicios,
     actualizarEjercicio,
     buscarEjercicioRecursivo,
-    ordenarEjercicios
+    ordenarEjercicios,
+    buscarEjerciciosPorNombre
 };
 
 

@@ -9,14 +9,19 @@ const {
     filtrarEjercicios,
     actualizarEjercicio,
     buscarEjercicioRecursivo,
-    ordenarEjercicios
+    ordenarEjercicios,
+    buscarEjerciciosPorNombre
 } = require('./datos.js');
 
 const {
     calcularDuracionTotal,
     multiplicarDuracionesEjercicios,
     estadisticasPlan
-} = require('./estadisticas.js')
+} = require('./estadisticas.js');
+
+const {
+    mostrarEjercicio
+} = require('./funcionesUtiles.js');
 
 function menu() {
 
@@ -38,6 +43,7 @@ function menu() {
             case 2:
                 if (Planes.size == 0) {
                     console.log("No hay planes disponibles.");
+                    break;
                 }
 
                 else {
@@ -90,7 +96,8 @@ function menu() {
                                             }
 
                                             else {
-                                                agregarEjercicio(plan, nuevoEjer);
+                                                plan = agregarEjercicio(plan, nuevoEjer);
+                                                Planes.set(plan.nombre, plan);
                                                 console.log("Ejercicio agregado.");
                                             }
                                             break;
@@ -100,9 +107,9 @@ function menu() {
                                             var flag = true;
                                             var nombreEjer = prompt("Dame el nombre del ejercicio: ");
 
-                                            for (var ejer of Planes.get(plan.nombre).ejers) {
+                                            for (var ejer of Planes.get(plan.nombre).ejercicios) {
                                                 if (ejer.nombre == nombreEjer) {
-                                                    var copia = eliminarEjercicio(Planes.get(plan.nombre), nombreEjer);
+                                                    const copia = eliminarEjercicio(Planes.get(plan.nombre), nombreEjer);
                                                     Planes.set(plan.nombre, copia);
                                                     console.log("Ejercicio eliminado.");
                                                     flag = false;
@@ -132,14 +139,14 @@ function menu() {
                                             if (res.length < 1) {
                                                 console.log("Ningún ejercicio cumple el filtro.");
                                             }
-                                            else console.log(filtrarEjercicios(Planes.get(plan.nombre), intensidadMax));
+                                            else res.forEach(mostrarEjercicio);
                                             break;
 
                                         case 5:
                                             var flag = true;
                                             var nombreEjer = prompt("Dame el nombre del ejercicio: ");
 
-                                            for (var ejer of Planes.get(plan.nombre).ejers) {
+                                            for (var ejer of Planes.get(plan.nombre).ejercicios) {
                                                 if (ejer.nombre == nombreEjer) {
                                                     var nuevaDuracion = prompt("Dame la duración actualizada: ");
                                                     var nuevaIntensidad = prompt("Dame la intensidad actualizada: ");
@@ -149,7 +156,7 @@ function menu() {
                                                         break;
                                                     }
                                                     else {
-                                                        var copia = actualizarEjercicio(Planes.get(plan.nombre), nombreEjer, nuevaDuracion, nuevaIntensidad);
+                                                        const copia = actualizarEjercicio(Planes.get(plan.nombre), nombreEjer, nuevaDuracion, nuevaIntensidad);
                                                         flag = false;
                                                         console.log("Ejercicio actualizado.");
                                                         break;
@@ -173,20 +180,35 @@ function menu() {
                                             if (copia == null) {
                                                 console.log("Ejercicio no encontrado.")
                                             }
-                                            else console.log(copia);
+                                            else mostrarEjercicio(copia);
                                             break;
 
                                         case 8:
-                                            const duraciones = plan.ejers.map((ej) => ej.duracion);
+                                            const duraciones = plan.ejercicios.map((ej) => ej.duracion);
                                             var copia = multiplicarDuracionesEjercicios(...duraciones);
                                             console.log("Producto de las duraciones: " + copia);
 
                                             break;
 
                                         case 9:
+                                            var criterio = prompt("Inserta el criterio por el que comparar: ");
+                                            if(criterio == "nombre" || criterio == "duracion" || criterio == "intensidad" ){
+                                            var copia = ordenarEjercicios(plan, criterio);
+                                            plan = ordenarEjercicios(plan, criterio);
+                                            Planes.set(plan.nombre, plan);
+                                            console.log("Ejercicios ordenados.");
+                                            }
+                                            else console.log("Criterio no válido.");
                                             break;
 
                                         case 10:
+                                            const busqueda = prompt("Inserta el texto a buscar: ");
+                                            var copia = buscarEjerciciosPorNombre(plan, busqueda);
+                                            if(copia.length == 0){
+                                                console.log("No se han encontrado ejercicios.")
+                                            }
+                                            else copia.forEach(mostrarEjercicio);
+
 
                                             break;
 
