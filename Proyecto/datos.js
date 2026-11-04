@@ -1,7 +1,7 @@
 
 
 function crearEjercicio(nombre, duracion, intensidad) {
-    if (Number.isInteger(nombre) || !(duracion > 0) || !(intensidad <= 10 && intensidad >= 1) || nombre.trim() == "") {
+    if (Number.isInteger(nombre) || !(duracion > 0) || !(intensidad <= 10 && intensidad >= 1) || nombre.trim() == "" || !Number.isInteger(intensidad)) {
         return null;
     }
     else {
@@ -125,22 +125,41 @@ function combinarPlanes(plan1, plan2) {
     const ejer1 = [...plan1.ejercicios];
     const ejer2 = [...plan2.ejercicios];
 
-    const nuevoPlan = {
+    const union = ejer1.concat(ejer2);
+
+    let nuevoPlan = {
         nombre: nom1 + " + " + nom2,
         ejercicios: []
     }
 
-    for (let ejer of ejer1) {
-       nuevoPlan.ejercicios = agregarEjercicio(nuevoPlan, ejer);
+    const vistos=[];
+
+    for(const ejer of union){
+        vistos.push(ejer.nombre);
+        let cont = 0;
+
+        for(const nombre of vistos){
+            if(nombre == ejer.nombre){
+                cont++;
+            }
+        }
+
+        var nombreFinal = ejer.nombre;
+        if(cont > 1){
+            nombreFinal += cont; 
+        }
+
+        const nuevoEjer = {
+            nombre:nombreFinal,
+            duracion:ejer.duracion,
+            intensidad:ejer.intensidad
+        };
+
+        nuevoPlan = agregarEjercicio(nuevoPlan, nuevoEjer);
     }
-
-    for (let ejer of ejer2) {
-        nuevoPlan.ejercicios = agregarEjercicio(nuevoPlan, ejer);
-    }
-
-
-
     return nuevoPlan;
+
+
 
 
 

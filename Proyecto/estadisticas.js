@@ -1,7 +1,7 @@
 function calcularDuracionTotal(plan){
     var suma = 0;
-    for (let i = 0; i < plan.ejers.length; i++) {
-       suma+=plan.ejers[i].duracion;
+    for (let i = 0; i < plan.ejercicios.length; i++) {
+       suma+=plan.ejercicios[i].duracion;
         
     }
     return suma;
@@ -21,24 +21,26 @@ function multiplicarDuracionesEjercicios(...duraciones){
 }
 
 function estadisticasPlan(plan){
-    var duracionPromedio=0;
-    var intensidadPromedio=0;
-    var totalEjercicios=0;
+    var duracionPromedio = 0;
+    var intensidadPromedio = 0;
+    var totalEjercicios = 0;
 
-    for(var ejer of plan.ejers){
-        duracionPromedio+= ejer.duracion;
-        intensidadPromedio+=ejer.intensidad;
+    for (var ejer of plan.ejercicios) {
+        duracionPromedio += ejer.duracion;
+        intensidadPromedio += ejer.intensidad;
         totalEjercicios++;
     }
 
-    duracionPromedio/=totalEjercicios;
-    intensidadPromedio/=totalEjercicios;
+    if (totalEjercicios > 0) {
+        duracionPromedio /= totalEjercicios;
+        intensidadPromedio /= totalEjercicios;
+    }
 
     const res = {
-        duracionPromedio:duracionPromedio,
-        intensidadPromedio:intensidadPromedio,
-        totalEjercicios:totalEjercicios
-    }
+        duracionPromedio: duracionPromedio,
+        intensidadPromedio: intensidadPromedio,
+        totalEjercicios: totalEjercicios
+    };
 
     return res;
 }

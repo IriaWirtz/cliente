@@ -31,13 +31,14 @@ function menu() {
         console.log("--- Menú Principal ---");
         console.log("1. Crear un nuevo plan");
         console.log("2. Gestionar un plan existente");
-        var elegir = Number(prompt("3. Salir \n"));
+        console.log("3. Salir")
+        var elegir = Number(prompt());
 
         switch (elegir) {
             case 1:
                 var nombrePlan = prompt("Dime el nombre del plan: ");
                 var plan = crearPlan(nombrePlan);
-                console.log("Plan creado");
+                console.log("Plan creado.");
                 Planes.set(nombrePlan, plan);
                 break;
 
@@ -51,12 +52,12 @@ function menu() {
                     var cont = 1;
                     console.log("Planes disponibles:");
                     for (var [nombre, plan] of Planes) {
-                        console.log(cont + "." + nombre);
+                        console.log(cont + ". " + nombre);
                         cont++;
                     }
                     var num = Number(prompt("Dame el número del plan que quieras gestionar: "));
 
-                    if (num > Planes.size + 1 || num < 1) {
+                    if (num > Planes.size || num < 1 || !Number.isInteger(num)) {
                         console.log("Plan no válido.");
                         break;
                     }
@@ -92,7 +93,7 @@ function menu() {
 
                                             var nuevoEjer = crearEjercicio(nombreEjer, duracionEjer, intensidadEjer);
 
-                                            if (crearEjercicio == null) {
+                                            if (nuevoEjer == null) {
                                                 console.log("Datos no válidos.");
                                             }
 
@@ -112,6 +113,7 @@ function menu() {
                                                 if (ejer.nombre == nombreEjer) {
                                                     const copia = eliminarEjercicio(Planes.get(plan.nombre), nombreEjer);
                                                     Planes.set(plan.nombre, copia);
+                                                    plan = copia;
                                                     console.log("Ejercicio eliminado.");
                                                     flag = false;
                                                     break;
@@ -143,33 +145,41 @@ function menu() {
                                             else res.forEach(mostrarEjercicio);
                                             break;
 
+
                                         case 5:
                                             var flag = true;
                                             var nombreEjer = prompt("Dame el nombre del ejercicio: ");
 
                                             for (var ejer of Planes.get(plan.nombre).ejercicios) {
                                                 if (ejer.nombre == nombreEjer) {
-                                                    var nuevaDuracion = prompt("Dame la duración actualizada: ");
-                                                    var nuevaIntensidad = prompt("Dame la intensidad actualizada: ");
+                                                    flag = false;
+                                                    var nuevaDuracion = Number(prompt("Dame la duración actualizada: "));
+                                                    var textoIntensidad = prompt("Dame la intensidad actualizada: ");
 
-                                                    if (nuevaDuracion < 0 || (nuevaIntensidad > 10 || nuevaIntensidad < 1)) {
+
+                                                    var nuevaIntensidad = ejer.intensidad;
+                                                    if (textoIntensidad.trim() != "") {
+                                                        nuevaIntensidad = Number(textoIntensidad);
+                                                    }
+
+                                                    if (!(nuevaDuracion > 0) || !Number.isInteger(nuevaIntensidad) || nuevaIntensidad < 1 || nuevaIntensidad > 10) {
                                                         console.log("Datos no válidos.");
-                                                        break;
                                                     }
                                                     else {
                                                         const copia = actualizarEjercicio(Planes.get(plan.nombre), nombreEjer, nuevaDuracion, nuevaIntensidad);
-                                                        flag = false;
+                                                        Planes.set(plan.nombre, copia);
+                                                        plan = copia;
                                                         console.log("Ejercicio actualizado.");
-                                                        break;
                                                     }
-                                                }
-
-                                                if (flag) {
-                                                    console.log("No existe ningún ejercicio con ese nombre.");
                                                     break;
                                                 }
                                             }
+
+                                            if (flag) {
+                                                console.log("No existe ningún ejercicio con ese nombre.");
+                                            }
                                             break;
+
                                         case 6:
                                             var copia = calcularDuracionTotal(plan);
                                             console.log("Duración total: " + copia + " minutos");
@@ -194,7 +204,6 @@ function menu() {
                                         case 9:
                                             var criterio = prompt("Inserta el criterio por el que comparar: ");
                                             if (criterio == "nombre" || criterio == "duracion" || criterio == "intensidad") {
-                                                var copia = ordenarEjercicios(plan, criterio);
                                                 plan = ordenarEjercicios(plan, criterio);
                                                 Planes.set(plan.nombre, plan);
                                                 console.log("Ejercicios ordenados.");
@@ -215,61 +224,44 @@ function menu() {
 
                                         case 11:
                                             var copia = estadisticasPlan(plan);
-                                            console.log("Duración promedio: " + copia.duracionPromedio);
+                                            console.log("Duración promedio: " + copia.duracionPromedio + " minutos");
                                             console.log("Intensidad promedio: " + copia.intensidadPromedio);
                                             console.log("Total de ejercicios: " + copia.totalEjercicios);
                                             break;
 
                                         case 12:
-                                            if (Planes.size == 0) {
-                                                console.log("No hay planes disponibles.");
+                                            var cont12 = 1;
+                                            if (Planes.size == 1) {
+                                                console.log("No hay otros planes para combinar.");
                                                 break;
                                             }
-
-                                            else {
-                                                var cont12 = 1;
-                                                var flag12 = true;
-                                                if (Planes.size > 1) {
-                                                    console.log("Planes disponibles:");
-                                                    for (var [nom, plan2] of Planes) {
-                                                        if (plan.nombre === nom) {
-                                                           
-                                                            continue;
-                                                        }
-
-                                                        else {console.log(cont12 + "." + nom);}
-                                                        cont12++;
-                                                    }
-                                                    var elegC12 = prompt("Dame el numero del plan que quieres combinar: ");
-                                                    if (elegC12 > cont12 || elegC12 < 1) {
-                                                        console.log("Plan no válido.");
-                                                        break;
-                                                    }
-                                                    var cont2 = 1;
-                                                    for (var [nomPlan, planActual] of Planes) {
-                                                         if (plan.nombre === nomPlan) {
-                                                           
-                                                            continue;
-                                                        }
-                                                        if (elegC12 == cont2) {
-                                                            const combinado= combinarPlanes(plan, planActual);
-                                                            console.log("Plan combinado creado: " + nombre + " + " + nomPlan);
-                                                            Planes.set(combinado.nombre, combinado);
-                                                            console.log(combinado);
-                                                            flag12 = false;
-                                                            break;
-
-
-                                                        }
-                                                        cont2++;
-
-                                                    }
-
-                                                   if(flag12 == true) {console.log("No hay otros planes para combinar.");}
-
-                                                    
+                                            console.log("Planes disponibles:");
+                                            for (var [nom, plan2] of Planes) {
+                                                if (plan.nombre == nom) {
+                                                    continue;
                                                 }
+                                                console.log(cont12 + ". " + nom);
+                                                cont12++;
                                             }
+                                            var elegC12 = Number(prompt("Dame el numero del plan que quieres combinar: "));
+                                            if (!Number.isInteger(elegC12) || elegC12 > cont12 - 1 || elegC12 < 1) {
+                                                console.log("Plan no válido.");
+                                                break;
+                                            }
+                                            var cont2 = 1;
+                                            for (var [nomPlan, planActual] of Planes) {
+                                                if (plan.nombre == nomPlan) {
+                                                    continue;
+                                                }
+                                                if (elegC12 == cont2) {
+                                                    const combinado = combinarPlanes(plan, planActual);
+                                                    Planes.set(combinado.nombre, combinado);
+                                                    console.log("Plan combinado creado: " + combinado.nombre);
+                                                    break;
+                                                }
+                                                cont2++;
+                                            }
+                                            break;
 
                                         case 13:
                                             break;
