@@ -1,0 +1,3 @@
+const id = setTimeout(() => {
+  console.log('Han pasado 10 segundos');
+}, 10000);
