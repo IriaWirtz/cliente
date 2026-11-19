@@ -1,5 +1,8 @@
 let elemento = document.getElementById("elementoSigueCursor");
 document.addEventListener('mousemove', (evento) =>{
-    evento.pageX = elemento.left;
-    evento.pageY = elemento.top;
+    let x = evento.pageX;
+    let y  = evento.pageY;
+
+    elemento.style.left=`${x}px`;
+    elemento.style.top=`${y}px`;
 })
