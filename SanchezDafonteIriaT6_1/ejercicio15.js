@@ -1,6 +1,7 @@
 const anadir = document.getElementById("anadir");
 const lista = document.getElementById("lista");
 const nueva = document.getElementById("nueva");
+const botonBorrar = document.querySelectorAll("button");
 
 
 anadir.addEventListener("click", ()=>{
