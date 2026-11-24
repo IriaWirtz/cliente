@@ -1,25 +1,24 @@
 const listaStrings = ["Manzana", "Banana", "Naranja", "Pera", "Uva", "Melón", "Sandía", "Piña"];
 
-let lista = document.getElementById('listaAutocompletar');
-let busqueda = document.getElementById('inputBusqueda');
+const lista = document.getElementById('listaAutocompletar');
+const busqueda = document.getElementById('inputBusqueda');
 
-listaStrings.forEach((fruta) => {
+for (const fruta of listaStrings) {
     const elemento = document.createElement('li');
     elemento.textContent = fruta;
     lista.append(elemento);
-})
+}
 
 busqueda.addEventListener('input', () => {
+    const texto = busqueda.value.toLowerCase().trim();
+
     lista.innerHTML = "";
-    listaStrings.forEach((fruta) => {
-        console.log(fruta);
-        console.log(busqueda.textContent);
-        if (fruta.includes(busqueda.textContent)) {
+
+    for (const fruta of listaStrings) {
+        if (fruta.toLowerCase().includes(texto)) {
             const elemento = document.createElement('li');
             elemento.textContent = fruta;
             lista.append(elemento);
         }
-    })
-
-})
-
+    }
+});
