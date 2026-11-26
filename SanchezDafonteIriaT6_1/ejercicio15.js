@@ -1,13 +1,11 @@
 const anadir = document.getElementById("anadir");
 const lista = document.getElementById("lista");
 const nueva = document.getElementById("nueva");
-  const botonBorrar = document.querySelectorAll("#borrarID");
 
 
 anadir.addEventListener("click", ()=>{
    const borrar = document.createElement("button");
     const elemento = document.createElement("li");
-    borrar.setAttribute("id", "borrarID");
    
 
     if(nueva.value.trim()=== "" || nueva.value === null){
@@ -21,17 +19,14 @@ anadir.addEventListener("click", ()=>{
         
          lista.append(elemento);
     }
+
+    borrar.addEventListener("click", ()=>{
+      elemento.remove();
+    })
     
    
 })
 
-
-     for(let boton of botonBorrar){
-
-    boton.addEventListener("click",()=>{
-    const elBorrar = boton.closest("li");
-    lista.remove(elBorrar);
-    })}
 
 
 
